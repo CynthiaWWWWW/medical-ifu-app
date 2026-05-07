@@ -5,11 +5,11 @@ import pandas as pd
 st.set_page_config(
     page_title="醫材 IFU 導航中心",
     page_icon="🩺",
-    layout="wide", # 使用寬版模式
-    initial_sidebar_state="collapsed" # 預設收起側邊欄
+    layout="wide", 
+    initial_sidebar_state="collapsed" 
 )
 
-# 2. 建立資料庫：(TFDA 置頂，J&J 殿後)
+# 2. 建立資料庫：(排序：TFDA 置頂，J&J 殿後)
 data = [
     {
         "廠商": "TFDA 醫療器材查詢系統", 
@@ -64,24 +64,31 @@ data = [
 # 將資料轉換為 DataFrame 格式
 df = pd.DataFrame(data)
 
-# --- 側邊欄搜尋控制 ---
+# --- 側邊欄排版優化 (Sidebar) ---
 with st.sidebar:
-    # 標題改為「搜尋」
-    st.title("🔍 搜尋")
+    st.markdown("## ⚙️ 系統選單")
     st.write("---")
-    # 搜尋欄位標籤亦為「搜尋」，採用後模糊搜尋邏輯 (Prefix Match)
-    search_query = st.text_input("搜尋", placeholder="搜尋廠商...")
+    
+    # 使用容器框住搜尋功能，使其更具層次感
+    with st.container(border=True):
+        st.markdown("##### 🔍 廠商檢索")
+        search_query = st.text_input("搜尋", placeholder="請輸入廠商開頭...", label_visibility="collapsed")
+    
+    st.write("---")
+    
+    # 新增最後更新日，放在側邊欄底部作為資訊參考
+    st.markdown("📅 **最後更新日**")
+    st.info("2026-05-07")
+    
+    st.write("") # 留白
+    st.caption("本工具僅供醫療專業人員參考使用。")
 
 # --- 主頁面標題 ---
-# 標題縮小兩號：使用 ### (H3) 替代原本的 st.title
 st.markdown("### 🩺 醫療器材 IFU 全球導航系統")
 st.markdown("##### 快速獲取各大醫療器材商之電子說明書 (eIFU) 官方入口")
 
 # --- 搜尋過濾函數 (後模糊搜尋邏輯) ---
 def filter_logic(row, query):
-    """
-    檢查目標文字是否以搜尋字串為開頭。
-    """
     if not query:
         return True
     query = query.lower()
@@ -111,10 +118,9 @@ cols = st.columns(2)
 for index, row in filtered_df.reset_index(drop=True).iterrows():
     with cols[index % 2]:
         with st.container(border=True):
-            # 卡片內部分為資訊區與按鈕區
             c1, c2 = st.columns([3, 1.2])
             with c1:
-                # 廠商主名稱 (標題縮小兩號 #####)
+                # 廠商主名稱
                 st.markdown(f"##### {row['廠商']}")
                 
                 # 子公司呈現 (灰色小字)
