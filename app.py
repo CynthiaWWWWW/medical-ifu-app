@@ -12,7 +12,7 @@ st.set_page_config(
 # 2. 建立資料庫：將 Aesculap 替換為母公司 B. Braun
 data = [
     {
-        "廠商": "Medtronic 美敦力", 
+        "廠商": "Medtronic", 
         "子公司": ["Covidien", "Midas Rex", "Kyphon", "Smith & Nephew-ENT"],
         "連結": "https://manuals.medtronic.com/manuals/main/en_US/home", 
         "備註": ""
@@ -30,19 +30,19 @@ data = [
         "備註": ""
     },
     {
-        "廠商": "Stryker 史賽克", 
+        "廠商": "Stryker", 
         "子公司": ["Wright Medical", "Mako", "KLS Martin (部分代理)"],
         "連結": "https://ifu.stryker.com/", 
         "備註": ""
     },
     {
-        "廠商": "Abbott 亞培", 
+        "廠商": "Abbott", 
         "子公司": ["St. Jude Medical", "Thoratec", "Alere"],
         "連結": "https://www.eifu.abbott/", 
         "備註": ""
     },
     {
-        "廠商": "Integra LifeSciences 英特格拉", 
+        "廠商": "Integra LifeSciences", 
         "子公司": ["Codman", "CUSA", "DuraGen", "Mayfield", "MicroFrance"],
         "連結": "https://labeling.integralife.com/eifu/pages/eifu-home", 
         "備註": ""
@@ -54,7 +54,7 @@ data = [
         "備註": ""
     },
     {
-        "廠商": "B. Braun 貝朗", 
+        "廠商": "B. Braun", 
         "子公司": ["Aesculap (蛇牌)", "Avitum", "B. Braun Medical"],
         "連結": "https://eifu.bbraun.com/en-01/view-selection", 
         "備註": ""
