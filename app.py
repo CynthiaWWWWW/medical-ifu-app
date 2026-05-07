@@ -70,7 +70,7 @@ with st.sidebar:
     st.title("🔍 搜尋")
     st.write("---")
     # 搜尋欄位標籤亦為「搜尋」，採用後模糊搜尋邏輯 (Prefix Match)
-    search_query = st.text_input("搜尋", placeholder="搜尋廠商或品牌名稱開頭...")
+    search_query = st.text_input("搜尋", placeholder="搜尋廠商...")
 
 # --- 主頁面標題 ---
 # 標題縮小兩號：使用 ### (H3) 替代原本的 st.title
