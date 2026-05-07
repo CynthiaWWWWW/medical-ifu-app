@@ -66,30 +66,31 @@ df = pd.DataFrame(data)
 
 # --- 側邊欄搜尋控制 ---
 with st.sidebar:
-    st.title("🔍 控制中心")
-    # 欄位名稱改為「搜尋」，並採用後模糊搜尋邏輯 (Prefix Match)
-    search_query = st.text_input("搜尋", placeholder="搜尋廠商或品牌名稱開頭...")
+    # 標題改為「搜尋」
+    st.title("🔍 搜尋")
     st.write("---")
-    # 版本資訊已刪除
+    # 搜尋欄位標籤亦為「搜尋」，採用後模糊搜尋邏輯 (Prefix Match)
+    search_query = st.text_input("搜尋", placeholder="搜尋廠商或品牌名稱開頭...")
 
 # --- 主頁面標題 ---
-st.title("🩺 醫療器材 IFU 全球導航系統")
+# 標題縮小兩號：使用 ### (H3) 替代原本的 st.title
+st.markdown("### 🩺 醫療器材 IFU 全球導航系統")
 st.markdown("##### 快速獲取各大醫療器材商之電子說明書 (eIFU) 官方入口")
 
-# --- 搜尋過濾函數 (實作後模糊搜尋) ---
+# --- 搜尋過濾函數 (後模糊搜尋邏輯) ---
 def filter_logic(row, query):
     """
-    後模糊搜尋邏輯：檢查目標文字是否以搜尋字串作為開頭。
+    檢查目標文字是否以搜尋字串為開頭。
     """
     if not query:
         return True
     query = query.lower()
     
-    # 檢查主名稱是否以該字串開頭
+    # 檢查主名稱開頭
     if row['廠商'].lower().startswith(query):
         return True
     
-    # 檢查子公司清單中是否有任何名稱以該字串開頭
+    # 檢查子公司名稱開頭
     if any(sub.lower().startswith(query) for sub in row['子公司']):
         return True
         
@@ -135,5 +136,5 @@ for index, row in filtered_df.reset_index(drop=True).iterrows():
 
 # --- 頁尾聲明 ---
 st.divider()
-st.info("💡 **提示：** 目前搜尋採用「後模糊搜尋」模式，請輸入名稱開頭關鍵字進行檢索。")
+st.info("💡 **提示：** 目前搜尋採用「後模糊搜尋」模式（由字首開始比對）。")
 st.warning("免責聲明：本站僅提供導航連結，實際產品資訊與說明書版本請務必以原廠官網最新發布為準。")
