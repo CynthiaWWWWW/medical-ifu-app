@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 建立廠商資料庫：(已更新 J&J 備註、Medtronic 與 TFDA 連結)
+# 2. 建立廠商資料庫：(已更新備註文字標籤)
 # 欄位包含：廠商名稱、產品類別、官方連結、適用地區、操作備註
 data = [
     {
@@ -79,7 +79,7 @@ with st.sidebar:
     selected_cat = st.selectbox("依類別篩選", categories)
     
     st.write("---")
-    st.caption("版本：v1.2.8")
+    st.caption("版本：v1.2.9")
     st.caption("更新日期：2026-05-07")
 
 # --- 主頁面標題與簡介 ---
@@ -121,9 +121,9 @@ for index, row in filtered_df.reset_index(drop=True).iterrows():
                 st.markdown(f"**類別：** `{row['類別']}`")
                 st.markdown(f"**地區：** {row['地區']}")
                 
-                # 如果該廠商有備註資訊，則顯示出來
+                # 如果該廠商有備註資訊，則顯示出來 (已將 建議 改為 備註)
                 if row['備註']:
-                    st.markdown(f"📌 **建議：** <small>{row['備註']}</small>", unsafe_allow_html=True)
+                    st.markdown(f"📌 **備註：** <small>{row['備註']}</small>", unsafe_allow_html=True)
                     
             with c2:
                 # 垂直對齊留白
