@@ -9,14 +9,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 建立廠商資料庫：在此清單中增加新廠商
+# 2. 建立廠商資料庫：(已移除 Siemens、GE 與 Philips)
 # 欄位包含：廠商名稱、產品類別、官方連結、適用地區
 data = [
     {"廠商": "Medtronic 美敦力", "類別": "心血管/植入物", "連結": "https://manuals.medtronic.com/", "地區": "全球"},
     {"廠商": "Johnson & Johnson", "類別": "外科/骨科", "連結": "https://www.e-ifu.com/", "地區": "全球"},
-    {"廠商": "Siemens 西門子", "類別": "影像診斷/檢驗", "連結": "https://www.siemens-healthineers.com/support-documentation", "地區": "全球"},
-    {"廠商": "GE Healthcare", "類別": "影像設備/服務", "連結": "https://www.gehealthcare.com/support/documentation", "地區": "全球"},
-    {"廠商": "Philips 飛利浦", "類別": "影像/臨床監護", "連結": "https://www.philips.com.tw/healthcare/support/incenter", "地區": "全球"},
     {"廠商": "TFDA 台灣食藥署", "類別": "政府資料庫", "連結": "https://info.fda.gov.tw/MLMS/H0001.aspx", "地區": "台灣"},
     {"廠商": "Stryker 史賽克", "類別": "骨科/手術儀器", "連結": "https://ifu.stryker.com/", "地區": "全球"},
     {"廠商": "Abbott 亞培", "類別": "檢驗/心血管", "連結": "https://www.eifu.abbott/", "地區": "全球"},
@@ -33,14 +30,14 @@ with st.sidebar:
     st.write("---")
     
     # 建立搜尋輸入框，使用者可輸入廠商名稱或類別關鍵字
-    search_query = st.text_input("關鍵字搜尋", placeholder="例如：Aesculap...")
+    search_query = st.text_input("關鍵字搜尋", placeholder="搜尋廠商...")
     
     # 從資料中提取所有不重複的類別，並增加「全部」選項
     categories = ["全部"] + sorted(list(df["類別"].unique()))
     selected_cat = st.selectbox("依類別篩選", categories)
     
     st.write("---")
-    st.caption("版本：v1.2.2")
+    st.caption("版本：v1.2.4")
     st.caption("更新日期：2026-05-07")
 
 # --- 主頁面標題與簡介 ---
@@ -77,7 +74,7 @@ for index, row in filtered_df.reset_index(drop=True).iterrows():
             # 卡片內部再次分為兩欄：左邊顯示資訊，右邊放置按鈕
             c1, c2 = st.columns([3, 1])
             with c1:
-                # 廠商字體：使用 ##### (五級標題)，縮小兩號
+                # 廠商字體：使用 ##### (五級標題)，比原本的 subheader 小兩號
                 st.markdown(f"##### {row['廠商']}") 
                 st.markdown(f"**類別：** `{row['類別']}`")
                 st.markdown(f"**地區：** {row['地區']}")
