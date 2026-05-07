@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed" # 預設收起側邊欄
 )
 
-# 2. 建立資料庫：(TFDA 置頂，J&J 移至最後)
+# 2. 建立資料庫：(TFDA 置頂，J&J 殿後)
 data = [
     {
         "廠商": "TFDA 醫療器材查詢系統", 
@@ -64,32 +64,38 @@ data = [
 # 將資料轉換為 DataFrame 格式
 df = pd.DataFrame(data)
 
-# --- 側邊欄搜尋與過濾邏輯 ---
+# --- 側邊欄搜尋控制 ---
 with st.sidebar:
-    st.title("🔍 搜尋控制")
-    # 支援搜尋主廠商與子公司品牌
-    search_query = st.text_input("搜尋廠商或品牌...", placeholder="例如：Ethicon 或 Covidien")
+    st.title("🔍 控制中心")
+    # 欄位名稱改為「搜尋」，並採用後模糊搜尋邏輯 (Prefix Match)
+    search_query = st.text_input("搜尋", placeholder="搜尋廠商或品牌名稱開頭...")
     st.write("---")
-    st.caption("版本：v1.9.1 (J&J 殿後)")
-    st.caption("更新日期：2026-05-07")
+    # 版本資訊已刪除
 
 # --- 主頁面標題 ---
 st.title("🩺 醫療器材 IFU 全球導航系統")
 st.markdown("##### 快速獲取各大醫療器材商之電子說明書 (eIFU) 官方入口")
 
-# --- 搜尋過濾函數 ---
+# --- 搜尋過濾函數 (實作後模糊搜尋) ---
 def filter_logic(row, query):
-    """比對主名稱與子公司清單"""
+    """
+    後模糊搜尋邏輯：檢查目標文字是否以搜尋字串作為開頭。
+    """
     if not query:
         return True
     query = query.lower()
-    if query in row['廠商'].lower():
+    
+    # 檢查主名稱是否以該字串開頭
+    if row['廠商'].lower().startswith(query):
         return True
-    if any(query in sub.lower() for sub in row['子公司']):
+    
+    # 檢查子公司清單中是否有任何名稱以該字串開頭
+    if any(sub.lower().startswith(query) for sub in row['子公司']):
         return True
+        
     return False
 
-# 執行過濾
+# 執行資料過濾
 if search_query:
     mask = df.apply(lambda row: filter_logic(row, search_query), axis=1)
     filtered_df = df[mask]
@@ -98,23 +104,24 @@ else:
 
 st.write(f"目前顯示： {len(filtered_df)} 筆結果")
 
-# --- 卡片式佈局 ---
+# --- 卡片式佈局設計 ---
 cols = st.columns(2)
 
 for index, row in filtered_df.reset_index(drop=True).iterrows():
     with cols[index % 2]:
         with st.container(border=True):
+            # 卡片內部分為資訊區與按鈕區
             c1, c2 = st.columns([3, 1.2])
             with c1:
-                # 標題縮小兩號 #####
+                # 廠商主名稱 (標題縮小兩號 #####)
                 st.markdown(f"##### {row['廠商']}")
                 
-                # 子公司灰色小字
+                # 子公司呈現 (灰色小字)
                 if row['子公司']:
                     subs_text = " • ".join(row['子公司'])
                     st.markdown(f"<p style='color: gray; font-size: 0.85rem; margin-top: -10px;'>包含：{subs_text}</p>", unsafe_allow_html=True)
                 
-                # 顯示備註
+                # 顯示備註資訊
                 if row['備註']:
                     st.markdown(f"📌 **備註：** <small>{row['備註']}</small>", unsafe_allow_html=True)
                 else:
@@ -123,9 +130,10 @@ for index, row in filtered_df.reset_index(drop=True).iterrows():
             with c2:
                 st.write("")
                 st.write("")
+                # 前往官方 eIFU 入口按鈕
                 st.link_button("前往 eIFU", row['連結'], use_container_width=True)
 
-# --- 頁尾 ---
+# --- 頁尾聲明 ---
 st.divider()
-st.info("💡 **提示：** 搜尋框支援模糊搜尋，您可以直接輸入子品牌名稱快速定位。")
+st.info("💡 **提示：** 目前搜尋採用「後模糊搜尋」模式，請輸入名稱開頭關鍵字進行檢索。")
 st.warning("免責聲明：本站僅提供導航連結，實際產品資訊與說明書版本請務必以原廠官網最新發布為準。")
